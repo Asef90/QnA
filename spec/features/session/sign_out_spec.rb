@@ -8,11 +8,18 @@ feature 'User can sign out', %q{
 
   given(:user) { create(:user) }
 
-  background { sign_in(user) }
-
-  scenario 'Registered user tries to sign out' do
+  scenario 'Authenticated user tries to sign out' do
+    sign_in(user)
     click_on 'Sign out'
 
     expect(page).to have_content 'Signed out successfully.'
   end
+
+  scenario 'Unauthenticated user tries to sign out' do
+    visit root_path
+
+    expect(page).not_to have_content('Sign out')
+  end
+
+
 end
