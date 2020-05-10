@@ -1,2 +1,7 @@
 h1= @question.title
 p= @question.body
+
+ul
+  = render @question.answers
+
+p= render 'answers/form'
