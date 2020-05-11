@@ -78,7 +78,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'authenticated user is an author' do
       before { login(user) }
 
-      it 'deletes question from database' do
+      it 'deletes question from the database' do
         expect { delete :destroy, params: { id: question } }.to change(user.questions, :count).by(-1)
       end
 
@@ -93,13 +93,13 @@ RSpec.describe QuestionsController, type: :controller do
 
       before { login(another_user) }
 
-      it 'does not delete question from database' do
+      it 'does not delete question from the database' do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
     end
 
     context 'unauthenticated user' do
-      it 'does not delete question from database' do
+      it 'does not delete question from the database' do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
     end

@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: %i[show]
+  before_action :set_answer, only: %i[show destroy]
   before_action :set_question, only: %i[new create]
 
   def show
@@ -13,11 +13,20 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params)
+    @answer.author = current_user
 
     if @answer.save
+      current_user.answers.push(@answer)
       redirect_to @question, notice: 'Your answer successfully created.'
     else
       render 'questions/show'
+    end
+  end
+
+  def destroy
+    if current_user&.author?(@answer)
+      @answer.destroy
+      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     end
   end
 

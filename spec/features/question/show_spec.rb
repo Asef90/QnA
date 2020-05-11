@@ -8,7 +8,7 @@ feature 'User can watch question and answers to it', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
-  given!(:answers) { create_list(:answer, 3, question: question) }
+  given!(:answers) { create_list(:answer, 3, question: question, author: user) }
 
   scenario 'Authenticated user can watch question and answers to it' do
     sign_in(user)
