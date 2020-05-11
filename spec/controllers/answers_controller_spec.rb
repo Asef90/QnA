@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create(:question) }
+  let(:question) { create(:question, author: user) }
 
   before { login(user) }
 
   describe 'GET #show' do
-    let(:answer) { create(:answer) }
+    let(:answer) { create(:answer, question: question) }
 
     before { get :show, params: { question_id: question, id: answer } }
 
@@ -36,7 +36,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: question,
-                                         answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
+                                         answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -48,7 +48,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'with invalid attributes' do
       it 'does not save the question' do
         expect { post :create, params: { question_id: question,
-                                         answer: attributes_for(:answer, :invalid) } }.to_not change(Answer, :count)
+                                         answer: attributes_for(:answer, :invalid) } }.to_not change(question.answers, :count)
       end
 
       it 're-renders new view' do

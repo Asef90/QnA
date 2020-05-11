@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-feature 'User can view all questions', %q{
+feature 'User can watch all questions', %q{
   In order to solve my problem
   As an user
-  I'd like to be able to view all questions
+  I'd like to be able to watch all questions
 } do
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:question, 3) }
+  given!(:questions) { create_list(:question, 3, author: user) }
 
   scenario 'Authenticated user tries to view the list of all questions' do
     sign_in(user)
