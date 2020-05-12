@@ -9,7 +9,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { create(:answer, question: question, author: user) }
 
     before{ login(user) }
-    before { get :show, params: { question_id: question, id: answer } }
+    before { get :show, params: { id: answer } }
 
     it 'assigns the requested answer to @answer' do
       expect(assigns(:answer)).to eq answer
@@ -41,6 +41,11 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
       end
 
+      it 'associate answer with its author' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        expect(assigns(:answer).author).to eq user
+      end
+
       it 'redirects to show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
         expect(response).to redirect_to assigns(:question)
@@ -67,11 +72,11 @@ RSpec.describe AnswersController, type: :controller do
       before{ login(user) }
 
       it 'deletes answer from the database' do
-        expect { delete :destroy, params: { id: answer, question_id: question } }.to change(question.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to question show index view' do
-        delete :destroy, params: { id: answer, question_id: question }
+      it 'redirects to question show view' do
+        delete :destroy, params: { id: answer }
         expect(response).to redirect_to assigns(:answer).question
       end
     end
@@ -82,13 +87,23 @@ RSpec.describe AnswersController, type: :controller do
       before{ login(another_user) }
 
       it 'does not delete answer from the database' do
-        expect { delete :destroy, params: { id: answer, question_id: question } }.not_to change(question.answers, :count)
+        expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to sign in view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     context 'unauthenticated user' do
       it 'does not delete answer from the database' do
-        expect { delete :destroy, params: { id: answer, question_id: question } }.not_to change(question.answers, :count)
+        expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to sign in view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

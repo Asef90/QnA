@@ -12,13 +12,12 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
-    @answer.author = current_user
+    @answer = @question.answers.build(answer_params.merge(author_id: current_user.id))
 
     if @answer.save
-      current_user.answers.push(@answer)
       redirect_to @question, notice: 'Your answer successfully created.'
     else
+      @question.answers.delete(@answer)
       render 'questions/show'
     end
   end
@@ -27,7 +26,10 @@ class AnswersController < ApplicationController
     if current_user&.author?(@answer)
       @answer.destroy
       redirect_to @answer.question, notice: 'Your answer successfully deleted.'
+    else
+      redirect_to new_user_session_path
     end
+
   end
 
   private

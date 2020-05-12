@@ -17,9 +17,7 @@ feature 'User can watch question and answers to it', %q{
 
     expect(page).to have_content(question.title)
     expect(page).to have_content(question.body)
-    expect(page).to have_content(answers.first.body)
-    expect(page).to have_content(answers.second.body)
-    expect(page).to have_content(answers.third.body)
+    answers.each { |answer| expect(page).to have_content(answer.body) }
   end
 
   scenario 'Unauthenticated user can watch question and answers to it' do
@@ -27,8 +25,6 @@ feature 'User can watch question and answers to it', %q{
 
     expect(page).to have_content(question.title)
     expect(page).to have_content(question.body)
-    expect(page).to have_content(answers.first.body)
-    expect(page).to have_content(answers.second.body)
-    expect(page).to have_content(answers.third.body)
+    answers.each { |answer| expect(page).to have_content(answer.body) }
   end
 end

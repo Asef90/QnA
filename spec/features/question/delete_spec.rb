@@ -26,7 +26,7 @@ feature 'User can delete his question', %q{
     scenario "tries to delete another's question" do
       visit question_path(question2)
 
-      expect(page).not_to have_content 'Delete question'
+      expect(page).not_to have_link 'Delete question'
     end
   end
 
@@ -34,6 +34,6 @@ feature 'User can delete his question', %q{
   scenario 'Unauthenticated user tries to delete question' do
     visit question_path(question1)
 
-    expect(page).not_to have_content 'Delete question'
+    expect(page).not_to have_link 'Delete question'
   end
 end

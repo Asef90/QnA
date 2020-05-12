@@ -96,11 +96,21 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not delete question from the database' do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
+
+      it 'redirects to sign in view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to new_user_session_path
+      end
     end
 
     context 'unauthenticated user' do
       it 'does not delete question from the database' do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
+      end
+
+      it 'redirects to sign in view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
