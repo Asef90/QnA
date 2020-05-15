@@ -1,23 +1,36 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: %i[show]
-  before_action :set_question, only: %i[create]
+  before_action :authenticate_user!
+  before_action :set_answer, only: %i[show destroy]
+  before_action :set_question, only: %i[new create]
 
   def show
 
   end
 
   def new
-    @answer = Answer.new
+    @answer = @question.answers.build
   end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.build(answer_params)
+    @answer.author = current_user
 
     if @answer.save
-      redirect_to [@question, @answer]
+      redirect_to @question, notice: 'Your answer successfully created.'
     else
-      render :new
+      @question.answers.delete(@answer)
+      render 'questions/show'
     end
+  end
+
+  def destroy
+    if current_user.author?(@answer)
+      @answer.destroy
+      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
+    else
+      redirect_to @answer.question, notice: 'Not enough access rights.'
+    end
+
   end
 
   private
