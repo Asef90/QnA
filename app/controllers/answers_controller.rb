@@ -24,11 +24,11 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user&.author?(@answer)
+    if current_user.author?(@answer)
       @answer.destroy
       redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     else
-      redirect_to new_user_session_path
+      redirect_to @answer.question, notice: 'Not enough access rights.'
     end
 
   end

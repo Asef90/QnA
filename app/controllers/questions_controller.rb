@@ -25,11 +25,11 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user&.author?(@question)
+    if current_user.author?(@question)
       @question.destroy
       redirect_to questions_path, notice: 'Your question successfully deleted.'
     else
-      redirect_to new_user_session_path
+      redirect_to questions_path, notice: 'Not enough access rights.'
     end
   end
 

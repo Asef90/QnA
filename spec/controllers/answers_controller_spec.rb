@@ -92,7 +92,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to sign in view' do
         delete :destroy, params: { id: answer }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to assigns(:answer).question
       end
     end
 
