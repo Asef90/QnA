@@ -6,7 +6,7 @@ p= @question.body
                                 method: :delete,
                                 data: { confirm: 'Are you sure?' }
 
-div
-  ul= render @question.answers
+.answers
+  = render @question.answers
 
 p= render 'answers/form'

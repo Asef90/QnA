@@ -38,29 +38,30 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question },
+                               format: :js }.to change(question.answers, :count).by(1)
       end
 
       it 'associate answer with its author' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
         expect(assigns(:answer).author).to eq user
       end
 
-      it 'redirects to show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(response).to redirect_to assigns(:question)
+      it 'renders create view' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
+        expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, params: { question_id: question,
-                                         answer: attributes_for(:answer, :invalid) } }.to_not change(question.answers, :count)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) },
+                               format: :js }.to_not change(question.answers, :count)
       end
 
-      it 're-renders new view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
-        expect(response).to render_template 'questions/show'
+      it 'renders create view' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js
+        expect(response).to render_template :create
       end
     end
   end

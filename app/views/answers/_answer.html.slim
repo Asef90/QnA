@@ -1,6 +1,5 @@
-li
-  = answer.body
-  -if current_user&.author?(answer)
-    p= link_to 'Delete answer', answer,
-                                method: :delete,
-                                data: { confirm: 'Are you sure?' }
+= answer.body
+-if current_user&.author?(answer)
+  p= link_to 'Delete answer', answer,
+                              method: :delete,
+                              data: { confirm: 'Are you sure?' }
