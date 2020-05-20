@@ -47,7 +47,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer).author).to eq user
       end
 
-      it 'renders create view' do
+      it 'renders create template' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
         expect(response).to render_template :create
       end
@@ -59,9 +59,40 @@ RSpec.describe AnswersController, type: :controller do
                                format: :js }.to_not change(question.answers, :count)
       end
 
-      it 'renders create view' do
+      it 'renders create template' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js
         expect(response).to render_template :create
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    let!(:answer) { create(:answer, question: question, author: user) }
+    before{ login(user) }
+
+    context 'with valid attributes' do
+      it 'changes answer attributes'do
+        patch :update, params: { id: answer, answer: { body: 'new body'} }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'renders update template' do
+        patch :update, params: { id: answer, answer: { body: 'new body'} }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not change answer attributes' do
+        expect do
+          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        end.to_not change(answer, :body)
+      end
+
+      it 'renders update template' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        expect(response).to render_template :update
       end
     end
   end

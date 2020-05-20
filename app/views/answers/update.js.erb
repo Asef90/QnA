@@ -1,6 +1,6 @@
 $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
-<% if @answer.persisted? %>
+<% if !@answer.errors.present? %>
+  $('#answer-<%= @answer.id %>').remove();
   $('.answers').append('<%= j render @answer %>');
-  $('textarea#answer_body').val('');
 <% end %>
