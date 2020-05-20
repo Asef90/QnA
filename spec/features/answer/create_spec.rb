@@ -32,11 +32,6 @@ feature 'User can create answer', %q{
     end
   end
 
-  scenario 'Unauthenticated user tries write an answer' do
-    visit question_path(question)
-    click_on 'Create answer'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
-  end
+  scenario 'Unauthenticated user tries write an answer'
 
 end

@@ -2,5 +2,5 @@ $('.answer-create-errors').html('<%= render 'shared/errors', resource: @answer %
 
 <% if @answer.persisted? %>
   $('.answers').append('<%= j render @answer %>');
-  $('textarea#answer_body').val('');
+  $('textarea#answer_create_body').val('');
 <% end %>

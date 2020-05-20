@@ -25,8 +25,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
-    @answer = Answer.new
+    if current_user.author?(@question)
+      @question.update(question_params)
+      @answer = Answer.new
+    else
+      render 'shared/_no_roots'
+    end
   end
 
   def destroy

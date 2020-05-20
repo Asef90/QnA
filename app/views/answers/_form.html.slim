@@ -3,9 +3,9 @@
 
 = form_with model: [@question, @answer] do |f|
   p
-    = f.label :body
+    = f.label :body, for: 'answer_create_body'
     br
-    = f.text_area :body
+    = f.text_area :body, id: 'answer_create_body'
 
   p
     = f.submit 'Create answer'

@@ -13,4 +13,5 @@ div id = "answer-#{answer.id}"
 
     p= link_to 'Delete answer', answer,
                                 method: :delete,
+                                remote: true,
                                 data: { confirm: 'Are you sure?' }

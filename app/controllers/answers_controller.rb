@@ -18,18 +18,20 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params)
-    @question = @answer.question
+    if current_user.author?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
+    else
+      render 'shared/_no_roots'
+    end
   end
 
   def destroy
     if current_user.author?(@answer)
       @answer.destroy
-      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     else
-      redirect_to @answer.question, notice: 'Not enough access rights.'
+      render 'shared/_no_roots'
     end
-
   end
 
   private

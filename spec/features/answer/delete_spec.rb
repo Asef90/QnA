@@ -9,7 +9,7 @@ feature 'User can delete his answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, author: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:answered_user) { create(:user) }
     given!(:answer) { create(:answer, author: answered_user, question: question) }
 
@@ -17,21 +17,26 @@ feature 'User can delete his answer', %q{
       sign_in(answered_user)
       visit question_path(question)
 
-      click_on 'Delete answer'
+        within '.answers' do
+        page.accept_confirm do
+          click_on 'Delete answer'
+        end
 
-      expect(page).to have_content 'Your answer successfully deleted.'
-      expect(page).not_to have_content(answer.body)
+        expect(page).not_to have_content(answer.body)
+      end
     end
 
     scenario "tries to delete another user's answer" do
       sign_in(user)
-
       visit question_path(question)
-      expect(page).not_to have_link 'Delete answer'
+
+      within '.answers' do
+        expect(page).not_to have_link 'Delete answer'
+      end
     end
   end
 
-  scenario 'Unauthenticated user tries to delete answer' do
+  scenario 'Unauthenticated user tries to delete answer', js: true do
     visit question_path(question)
 
     expect(page).not_to have_link 'Delete answer'
