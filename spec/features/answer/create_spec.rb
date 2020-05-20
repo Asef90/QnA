@@ -26,7 +26,9 @@ feature 'User can create answer', %q{
     scenario 'tries write an answer with errors' do
       click_on 'Create answer'
 
-      expect(page).to have_content "Body can't be blank"
+      within '.answer-create-errors' do
+        expect(page).to have_content "Body can't be blank"
+      end
     end
   end
 

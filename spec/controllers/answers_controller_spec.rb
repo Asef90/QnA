@@ -87,7 +87,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not change answer attributes' do
         expect do
           patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
-        end.to_not change(answer, :body)
+        end.to_not change(answer.reload, :body)
       end
 
       it 'renders update template' do

@@ -1,4 +1,4 @@
-$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+$('.answer-create-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% if @answer.persisted? %>
   $('.answers').append('<%= j render @answer %>');

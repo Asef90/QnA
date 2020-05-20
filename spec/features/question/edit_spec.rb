@@ -1,42 +1,44 @@
 require 'rails_helper'
 
-feature 'User can edit his answer', %q{
+feature 'User can edit his question', %q{
   In order to correct mistakes
-  As an author of answer
-  I'd like to be able to edit my answer
+  As an author of question
+  I'd like to be able to edit my question
 } do
 
   given(:user) { create(:user) }
   given(:another_user) { create(:user) }
-  given!(:question) { create(:question, author: user) }
-  given!(:answer) { create(:answer, question: question, author: user) }
+  given(:question) { create(:question, author: user) }
 
   describe 'Authenticated user', js: true do
-    scenario 'tries to edit his answer' do
+    scenario 'tries to edit his question' do
       sign_in(user)
       visit question_path(question)
 
-      within '.answers' do
+      within '.question' do
         click_on 'Edit'
-        fill_in 'Body', with: 'Edited answer'
+        fill_in 'Title', with: 'Edited title'
+        fill_in 'Body', with: 'Edited body'
         click_on 'Save'
 
-        expect(page).to_not have_content answer.body
-        expect(page).to have_content 'Edited answer'
+        expect(page).to_not have_content question.title
+        expect(page).to_not have_content question.body
+        expect(page).to have_content 'Edited title'
+        expect(page).to have_content 'Edited body'
         expect(page).to_not have_selector 'textarea'
       end
     end
 
-    scenario 'tries to edit his answer with errors' do
+    scenario 'tries to edit his question with errors' do
       sign_in(user)
       visit question_path(question)
 
-      within '.answers' do
+      within '.question' do
         click_on 'Edit'
-        fill_in 'Body', with: ''
+        fill_in 'Title', with: ''
         click_on 'Save'
 
-        expect(page).to have_content "Body can't be blank"
+        expect(page).to have_content "Title can't be blank"
       end
     end
 
@@ -44,7 +46,7 @@ feature 'User can edit his answer', %q{
       sign_in(another_user)
       visit question_path(question)
 
-      within '.answers' do
+      within '.question' do
         expect(page).to_not have_link 'Edit'
       end
     end
