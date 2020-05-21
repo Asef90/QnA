@@ -32,6 +32,9 @@ feature 'User can create answer', %q{
     end
   end
 
-  scenario 'Unauthenticated user tries write an answer'
+  scenario 'Unauthenticated user tries write an answer' do
+    visit question_path(question)
 
+    expect(page).not_to have_button 'Create answer'
+  end
 end

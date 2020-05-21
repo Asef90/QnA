@@ -24,4 +24,4 @@
 .answers
   = render @question.answers
 
-p= render 'answers/form'
+p= render 'answers/form' if current_user

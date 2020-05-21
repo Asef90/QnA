@@ -136,6 +136,51 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #set_best' do
+    let!(:answer) { create(:answer, question: question, author: user) }
+    context 'Authenticated user' do
+      context 'tries to set best mark to answer to his question' do
+        before do
+          login(user)
+          patch :set_best, params: { id: answer }, format: :js
+        end
+
+        it 'sets best mark to @answer' do
+          expect(assigns(:answer)).to be_best
+        end
+
+        it 'renders set_best template' do
+          expect(response).to render_template :set_best
+        end
+      end
+
+      context "tries to set best mark to answer to another user's question" do
+        before do
+          login(another_user)
+          patch :set_best, params: { id: answer }, format: :js
+        end
+
+        it 'does not set best mark to @answer' do
+          expect(assigns(:answer)).not_to be_best
+        end
+
+        it 'renders no roots template' do
+          expect(response).to render_template 'shared/_no_roots'
+        end
+      end
+    end
+
+    context 'Unauthenticated user tries to set best mark to answer to question' do
+      before { patch :set_best, params: { id: answer }, format: :js }
+
+      it 'does not set best mark to @answer' do
+        expect(answer.reload).not_to be_best
+      end
+
+      it 'responses with code 401'
+    end
+  end
+
   describe 'DELETE #destroy' do
     let!(:answer) { create(:answer, question: question, author: user) }
 

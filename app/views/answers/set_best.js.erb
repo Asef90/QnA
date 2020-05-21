@@ -1,0 +1,8 @@
+<% if @answer.best? %>
+  var best_answer_link = $('#set-best-answer-<%= @answer.id %>')
+
+  $('.set-best-answer').show();
+  best_answer_link.hide();
+
+  $(best_answer_link).closest('.answer').insertBefore($('.answer').first());
+<% end %>

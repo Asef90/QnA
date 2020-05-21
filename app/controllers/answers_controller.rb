@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: %i[show update destroy]
+  before_action :set_answer, only: %i[show update set_best destroy]
   before_action :set_question, only: %i[new create]
 
   def show
@@ -21,6 +21,14 @@ class AnswersController < ApplicationController
     if current_user.author?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
+    else
+      render 'shared/_no_roots'
+    end
+  end
+
+  def set_best
+    if current_user.author?(@answer.question)
+      @answer.set_best_mark
     else
       render 'shared/_no_roots'
     end
