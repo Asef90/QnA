@@ -9,7 +9,7 @@ feature 'User can create answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
 
@@ -20,22 +20,21 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: 'Test body'
       click_on 'Create answer'
 
-      expect(page).to have_content 'Your answer successfully created.'
       expect(page).to have_content 'Test body'
     end
 
     scenario 'tries write an answer with errors' do
       click_on 'Create answer'
 
-      expect(page).to have_content "Body can't be blank"
+      within '.answer-create-errors' do
+        expect(page).to have_content "Body can't be blank"
+      end
     end
   end
 
   scenario 'Unauthenticated user tries write an answer' do
     visit question_path(question)
-    click_on 'Create answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).not_to have_button 'Create answer'
   end
-
 end

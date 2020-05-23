@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
+  let(:another_user) { create(:user) }
   let(:question) { create(:question, author: user) }
 
   describe 'GET #index' do
@@ -69,6 +70,75 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question, :invalid) }
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'PATCH #update' do
+    context 'Authenticated user' do
+      before { login(user) }
+
+      context 'tries to update his question with valid attributes' do
+        before do
+          patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+        end
+
+        it 'changes question attributes' do
+          question.reload
+
+          expect(question.title).to eq 'New title'
+          expect(question.body).to eq 'New body'
+        end
+
+        it 'renders update template' do
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'tries to update his question with invalid attributes' do
+        it 'does not change question attributes' do
+          expect do
+            patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          end.to_not change(question, :title)
+          expect do
+            patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          end.to_not change(question, :body)
+        end
+
+        it 'renders update template' do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context "tries to update another user's question" do
+        before { login(another_user) }
+        it 'does not change question attributes' do
+          expect do
+            patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+          end.to_not change(question, :title)
+          expect do
+            patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+          end.to_not change(question, :body)
+        end
+
+        it 'renders no_roots template' do
+          patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+          expect(response).to render_template 'shared/_no_roots'
+        end
+      end
+    end
+
+    context 'Unauthenticated user tries to update question' do
+      it 'does not change question attributes' do
+        expect do
+          patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+        end.to_not change(question, :title)
+        expect do
+          patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+        end.to_not change(question, :body)
+      end
+
+      it 'responses with code 401'
     end
   end
 

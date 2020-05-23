@@ -1,13 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show destroy]
+  before_action :set_question, only: %i[show update destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
-    @answer = @question.answers.build
+    @answer = Answer.new
   end
 
   def new
@@ -21,6 +21,15 @@ class QuestionsController < ApplicationController
       redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new
+    end
+  end
+
+  def update
+    if current_user.author?(@question)
+      @question.update(question_params)
+      @answer = Answer.new
+    else
+      render 'shared/_no_roots'
     end
   end
 

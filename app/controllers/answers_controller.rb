@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: %i[show destroy]
+  before_action :set_answer, only: %i[show update set_best destroy]
   before_action :set_question, only: %i[new create]
 
   def show
@@ -14,23 +14,32 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
+    @answer.save
+  end
 
-    if @answer.save
-      redirect_to @question, notice: 'Your answer successfully created.'
+  def update
+    if current_user.author?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
     else
-      @question.answers.delete(@answer)
-      render 'questions/show'
+      render 'shared/_no_roots'
+    end
+  end
+
+  def set_best
+    if current_user.author?(@answer.question)
+      @answer.set_best_mark
+    else
+      render 'shared/_no_roots'
     end
   end
 
   def destroy
     if current_user.author?(@answer)
       @answer.destroy
-      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     else
-      redirect_to @answer.question, notice: 'Not enough access rights.'
+      render 'shared/_no_roots'
     end
-
   end
 
   private

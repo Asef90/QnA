@@ -5,6 +5,7 @@ FactoryBot.define do
 
   factory :answer do
     body
+    best_mark { false }
     association :question
 
     trait :invalid do
