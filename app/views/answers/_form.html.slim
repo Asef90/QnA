@@ -3,9 +3,12 @@
 
 = form_with model: [@question, @answer] do |f|
   p
-    = f.label :body, for: 'answer_create_body'
+    = f.label :body, for: 'create-answer-body'
     br
-    = f.text_area :body, id: 'answer_create_body'
-
+    = f.text_area :body, id: 'create-answer-body'
+  p
+    = f.label :files, for: 'create-answer-filefield'
+    br
+    = f.file_field :files, id: 'create-answer-filefield', multiple: true
   p
     = f.submit 'Create answer'
