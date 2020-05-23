@@ -9,7 +9,7 @@ class Answer < ApplicationRecord
   def set_best_mark
     transaction do
       Answer.where(question_id: question_id).update_all(best_mark: false)
-      update(best_mark: true)
+      update!(best_mark: true)
     end
   end
 
