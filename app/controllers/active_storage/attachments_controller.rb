@@ -4,7 +4,7 @@ class ActiveStorage::AttachmentsController < ApplicationController
 
   def destroy
     if current_user.author?(@attachment.record)
-      @attachment.destroy
+      @attachment.purge
     else
       render 'shared/_no_roots'
     end
