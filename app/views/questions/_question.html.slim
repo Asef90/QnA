@@ -4,7 +4,15 @@
 
   -if @question.files.attached?
     -@question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
+      p id = "question-file-#{file.id}"
+        = link_to file.filename.to_s, url_for(file)
+
+        -if current_user&.author?(file.record)
+          |  | 
+          = link_to 'Delete file', active_storage_attachment_path(file),
+                                   method: :delete,
+                                   remote: true,
+                                   data: { confirm: 'Are you sure?' }
 
   -if current_user&.author?(@question)
     p

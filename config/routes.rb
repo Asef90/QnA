@@ -9,4 +9,9 @@ Rails.application.routes.draw do
       member { patch :set_best }
     end
   end
+
+  namespace :active_storage do
+    resources :attachments, only: :destroy
+  end
+
 end
