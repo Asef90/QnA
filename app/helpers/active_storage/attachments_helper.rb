@@ -1,2 +1,0 @@
-module ActiveStorage::AttachmentsHelper
-end

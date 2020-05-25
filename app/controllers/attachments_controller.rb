@@ -1,5 +1,4 @@
-class ActiveStorage::AttachmentsController < ApplicationController
-  before_action :authenticate_user!
+class AttachmentsController < ApplicationController
   before_action :set_attachment, only: %i[destroy]
 
   def destroy

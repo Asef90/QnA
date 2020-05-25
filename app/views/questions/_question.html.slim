@@ -9,7 +9,7 @@
 
         -if current_user&.author?(file.record)
           |  |
-          = link_to 'Delete file', active_storage_attachment_path(file),
+          = link_to 'Delete file', attachment_path(file),
                                    method: :delete,
                                    remote: true,
                                    data: { confirm: 'Are you sure?' }
@@ -29,7 +29,7 @@
         = f.text_area :body
         br
         = f.label :files
-        = f.file_field :files, multiple: true, direct_upload: true
+        = f.file_field :files, multiple: true
         br
         = f.submit 'Save'
 

@@ -10,8 +10,5 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :active_storage do
-    resources :attachments, only: :destroy
-  end
-
+  resources :attachments, only: :destroy
 end

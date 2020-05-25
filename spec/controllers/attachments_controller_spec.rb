@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ActiveStorage::AttachmentsController, type: :controller do
+RSpec.describe AttachmentsController, type: :controller do
 
   let(:user) { create(:user) }
   let(:another_user) { create(:user) }
