@@ -12,31 +12,44 @@ feature 'User can edit his answer', %q{
   given!(:answer) { create(:answer, question: question, author: user) }
 
   describe 'Authenticated user', js: true do
-    scenario 'tries to edit his answer' do
-      sign_in(user)
-      visit question_path(question)
-
-      within '.answers' do
-        click_on 'Edit'
-        fill_in 'Body', with: 'Edited answer'
-        click_on 'Save'
-
-        expect(page).to_not have_content answer.body
-        expect(page).to have_content 'Edited answer'
-        expect(page).to_not have_selector 'textarea'
+    describe 'tries to edit his answer' do
+      background do
+        sign_in(user)
+        visit question_path(question)
       end
-    end
 
-    scenario 'tries to edit his answer with errors' do
-      sign_in(user)
-      visit question_path(question)
+      scenario 'with correct params' do
+        within '.answers' do
+          click_on 'Edit'
+          fill_in 'Body', with: 'Edited answer'
+          click_on 'Save'
 
-      within '.answers' do
-        click_on 'Edit'
-        fill_in 'Body', with: ''
-        click_on 'Save'
+          expect(page).to_not have_content answer.body
+          expect(page).to have_content 'Edited answer'
+          expect(page).to_not have_selector 'textarea'
+        end
+      end
 
-        expect(page).to have_content "Body can't be blank"
+      scenario 'with files adding' do
+        within '.answers' do
+          click_on 'Edit'
+          fill_in 'Body', with: 'Edited answer'
+          attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Save'
+
+          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+        end
+      end
+
+      scenario 'with errors' do
+        within '.answers' do
+          click_on 'Edit'
+          fill_in 'Body', with: ''
+          click_on 'Save'
+
+          expect(page).to have_content "Body can't be blank"
+        end
       end
     end
 

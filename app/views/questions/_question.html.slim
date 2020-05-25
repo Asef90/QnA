@@ -2,6 +2,18 @@
   h1= @question.title
   p= @question.body
 
+  -if @question.files.attached?
+    -@question.files.each do |file|
+      p id = "question-file-#{file.id}"
+        = link_to file.filename.to_s, url_for(file)
+
+        -if current_user&.author?(file.record)
+          |  |
+          = link_to 'Delete file', attachment_path(file),
+                                   method: :delete,
+                                   remote: true,
+                                   data: { confirm: 'Are you sure?' }
+
   -if current_user&.author?(@question)
     p
       = link_to 'Edit', '#', class: 'edit-question-link'
@@ -15,6 +27,10 @@
         br
         = f.label :body
         = f.text_area :body
+        br
+        = f.label :files
+        = f.file_field :files, multiple: true
+        br
         = f.submit 'Save'
 
     p= link_to 'Delete question', @question,
