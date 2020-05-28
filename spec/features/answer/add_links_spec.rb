@@ -16,13 +16,19 @@ feature 'User can add links to answer', %q{
 
     fill_in 'Body', with: 'Test answer'
 
-    fill_in 'Link name', with:'yandex'
-    fill_in 'Url', with: example_url
+    2.times { click_on 'add link' }
+
+    all('.nested-fields').each do |field|
+      within(field) do
+        fill_in 'Link name', with:'yandex'
+        fill_in 'Url', with: example_url
+      end
+    end
 
     click_on 'Create answer'
 
     within '.answers' do
-      expect(page).to have_link 'yandex', href: example_url
+      expect(page).to have_link 'yandex', href: example_url, count: 3
     end
   end
 end
