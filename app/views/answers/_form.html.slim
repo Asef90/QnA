@@ -10,5 +10,15 @@
     = f.label :files, for: 'create-answer-filefield'
     br
     = f.file_field :files, id: 'create-answer-filefield', multiple: true
+  p Links:
   p
-    = f.submit 'Create answer'
+    = f.fields_for :links do |l|
+      p
+        = l.label :name, 'Link name'
+        br
+        = l.text_field :name
+      p
+        = l.label :url
+        br
+        = l.text_field :url
+  p= f.submit 'Create answer'

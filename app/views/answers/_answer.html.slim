@@ -1,6 +1,12 @@
 div class='answer' id="answer-#{answer.id}"
   = answer.body
 
+  .links
+    p Links:
+    ul
+      -answer.links.each do |link|
+        li= link_to link.name, link.url
+
   -if answer.files.attached?
     -answer.files.each do |file|
       p id = "answer-file-#{file.id}"
