@@ -5,4 +5,8 @@ class Link < ApplicationRecord
 
   validates :name, :url, presence: true
   validates :url, format: { with: URL_FORMAT }
+
+  def gist_link?
+    url.include?('gist.github.com')
+  end
 end
