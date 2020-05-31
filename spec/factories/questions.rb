@@ -4,9 +4,14 @@ FactoryBot.define do
   end
 
   factory :question do
+
     association :author, factory: :user
     title
     body { "QuestionBody" }
+
+    trait :with_reward do
+      after(:create) { |question| create(:reward, question: question) }
+    end
 
     trait :invalid do
       title { nil }
