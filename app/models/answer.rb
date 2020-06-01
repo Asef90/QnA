@@ -12,13 +12,29 @@ class Answer < ApplicationRecord
   default_scope { order(best_mark: :desc) }
 
   def set_best_mark
-    transaction do
-      Answer.where(question_id: question_id).update_all(best_mark: false)
-      update!(best_mark: true)
+    unless best?
+      update_best_answer
+      give_reward_to_author
     end
   end
 
   def best?
     best_mark
+  end
+
+  private
+  def update_best_answer
+    transaction do
+      reset_all_answers_best_mark
+      update!(best_mark: true)
+    end
+  end
+
+  def reset_all_answers_best_mark
+    Answer.where(question_id: question_id).update_all(best_mark: false)
+  end
+
+  def give_reward_to_author
+    author.give_reward(question.reward) if question.with_reward?
   end
 end

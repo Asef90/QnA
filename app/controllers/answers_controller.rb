@@ -31,7 +31,6 @@ class AnswersController < ApplicationController
 
     if current_user.author?(question)
       @answer.set_best_mark
-      @answer.author.give_reward(question.reward) if question.with_reward?
     else
       render 'shared/_no_roots'
     end
