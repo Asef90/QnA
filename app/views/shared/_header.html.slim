@@ -1,3 +1,4 @@
 .header
   -if current_user
+    p= link_to 'Sign out', destroy_user_session_path, method: :delete
     p= link_to 'My rewards', rewards_path
