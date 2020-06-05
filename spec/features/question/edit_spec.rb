@@ -45,6 +45,21 @@ feature 'User can edit his question', %q{
         end
       end
 
+      scenario 'with links adding' do
+        within '.question' do
+          click_on 'Edit'
+
+          click_on 'add link'
+
+          fill_in 'Link name', with:'example'
+          fill_in 'Url', with: 'https://www.example.com'
+
+          click_on 'Save'
+
+          expect(page).to have_link 'example', href: 'https://www.example.com'
+        end
+      end
+
       scenario 'with errors' do
         within '.question' do
           click_on 'Edit'

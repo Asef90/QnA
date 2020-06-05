@@ -5,7 +5,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:another_user) { create(:user) }
   let(:question) { create(:question, author: user) }
 
-
   describe 'GET #show' do
     let(:answer) { create(:answer, question: question, author: user) }
 
@@ -138,7 +137,10 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #set_best' do
     let!(:answer) { create(:answer, question: question, author: user) }
+
     context 'Authenticated user' do
+      let!(:reward) { create(:reward, question: question) }
+
       context 'tries to set best mark to answer to his question' do
         before do
           login(user)
@@ -147,6 +149,10 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'sets best mark to @answer' do
           expect(assigns(:answer)).to be_best
+        end
+
+        it 'adds reward to author of answer' do
+          expect(assigns(:answer).author.rewards.first).to eq reward
         end
 
         it 'renders set_best template' do

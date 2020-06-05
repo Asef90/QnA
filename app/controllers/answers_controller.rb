@@ -27,7 +27,9 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    if current_user.author?(@answer.question)
+    question = @answer.question
+
+    if current_user.author?(question)
       @answer.set_best_mark
     else
       render 'shared/_no_roots'
@@ -53,6 +55,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, files: [])
+    params.require(:answer).permit(:body, files: [], links_attributes: [:name, :url, :_destroy])
   end
 end

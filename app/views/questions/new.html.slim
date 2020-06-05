@@ -13,4 +13,23 @@
     = f.label :files
     br
     = f.file_field :files, multiple: true
+
+  p Reward:
+  = f.fields_for :reward do |r|
+    p
+      = r.label :title, 'Reward title'
+      br
+      = r.text_field :title
+    p
+      = r.label :image
+      br
+      = r.file_field :image
+
+  p Links:
+  #links
+    = f.fields_for :links do |link|
+      = render 'shared/link_fields', f: link
+    .links
+      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+
   p= f.submit 'Ask'

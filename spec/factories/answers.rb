@@ -7,6 +7,7 @@ FactoryBot.define do
     body
     best_mark { false }
     association :question
+    association :author, factory: :user
 
     trait :invalid do
       body { nil }

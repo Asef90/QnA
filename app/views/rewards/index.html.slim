@@ -1,0 +1,14 @@
+h1 My rewards
+
+div
+  table
+    tr
+      th Question Title
+      th Reward Title
+      th Reward Image
+
+    -@rewards.each do |reward|
+      tr
+        th= reward.question.title
+        th= reward.title
+        th= image_tag(reward.image)

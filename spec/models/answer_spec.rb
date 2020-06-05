@@ -3,26 +3,45 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   it { should belong_to :question }
   it { should belong_to :author }
+  it { should have_many(:links).dependent(:destroy) }
+
   it { should validate_presence_of :body }
+
+  it { should accept_nested_attributes_for :links }
 
   it 'have many attached files' do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 
   let(:user) { create(:user) }
-  let(:question) { create(:question, author: user) }
+  let(:another_user) { create(:user) }
+  let(:question) { create(:question, :with_reward, author: user) }
   let!(:best_answer) { create(:answer, question: question, author: user, best_mark: true) }
-  let!(:answer) { create(:answer, question: question, author: user) }
+  let!(:answer) { create(:answer, question: question, author: another_user) }
 
   describe '#set_best_mark' do
-    before { answer.set_best_mark }
+    context 'with before method call' do
+      before { answer.set_best_mark }
 
-    it 'sets best mark to answer' do
-      expect(answer.reload).to be_best
+      it 'sets best mark to answer' do
+        expect(answer.reload).to be_best
+      end
+
+      it 'resets the previous best answer' do
+        expect(best_answer.reload).not_to be_best
+      end
+
+      it 'gives reward to author of best answer' do
+        expect(another_user.rewards.first).to eq question.reward
+      end
+
+      it 'does not change rewards of the author if answer already was the best' do
+        expect { answer.set_best_mark }.not_to change(another_user.rewards, :count)
+      end
     end
 
-    it 'resets the previous best answer' do
-      expect(best_answer.reload).not_to be_best
+    it "changes rewards of the author if answer wasn't the best" do
+      expect { answer.set_best_mark }.to change(another_user.rewards, :count).by(1)
     end
   end
 

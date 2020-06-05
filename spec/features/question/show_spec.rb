@@ -27,4 +27,15 @@ feature 'User can watch question and answers to it', %q{
     expect(page).to have_content(question.body)
     answers.each { |answer| expect(page).to have_content(answer.body) }
   end
+
+  describe 'With gist link' do
+    given!(:gist_link) { create(:link, linkable: question, url: 'https://gist.github.com/Asef90/a22d4e70429275c852cfef89cbb0c8f5') }
+
+    scenario 'User can view gist content' do
+      visit question_path(question)
+
+      expect(page).to have_content 'test-guru-question.txt'
+      expect(page).to have_content 'The capital of Italy?'
+    end
+  end
 end
