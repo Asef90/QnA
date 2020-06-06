@@ -1,15 +1,19 @@
 .question
   h1= @question.title
-  p= @question.body
+  p
+    = @question.body
 
-  -if @question.links.any?
-    = render 'shared/links', resource: @question
+    -if !current_user.author?(@question)
+      = render 'shared/voting', resource: @question
 
-  -if @question.files.attached?
-    = render 'shared/files', resource: @question
+    -if @question.links.any?
+      = render 'shared/links', resource: @question
 
-  -if current_user&.author?(@question)
-    p= render 'edit_form', question: @question
+    -if @question.files.attached?
+      = render 'shared/files', resource: @question
+
+    -if current_user&.author?(@question)
+      p= render 'edit_form', question: @question
 
 .answers
   = render @question.answers

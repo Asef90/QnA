@@ -1,0 +1,14 @@
+= link_to '+', send("vote_#{resource.class.name.downcase}_path", resource, value: 1),
+               method: :post,
+               remote: true,
+               data: { type: :json },
+               class: 'vote'
+
+span id="#{resource.class.name.downcase}-votes-number-#{resource.id}"
+  = resource.votes_number
+
+= link_to '-', send("vote_#{resource.class.name.downcase}_path", resource, value: -1),
+               method: :post,
+               remote: true,
+               data: { type: :json },
+               class: 'vote'
