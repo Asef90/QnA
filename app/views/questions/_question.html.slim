@@ -3,8 +3,11 @@
   p
     = @question.body
 
-    -if !current_user.author?(@question)
-      = render 'shared/voting', resource: @question
+    p id="question-votes-number-#{question.id}"
+      = question.votes_number
+
+    -if current_user && !current_user.author?(@question)
+      = render 'shared/vote_buttons', resource: @question
 
     -if @question.links.any?
       = render 'shared/links', resource: @question

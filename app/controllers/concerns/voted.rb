@@ -19,6 +19,7 @@ module Voted
   end
 
   private
+
   def model_klass
     controller_name.classify.constantize
   end

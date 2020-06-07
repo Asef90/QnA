@@ -1,8 +1,11 @@
 div class='answer' id="answer-#{answer.id}"
   = answer.body
 
-  -if !current_user.author?(answer)
-    = render 'shared/voting', resource: answer
+  p id="answer-votes-number-#{answer.id}"
+    = answer.votes_number
+
+  -if current_user && !current_user.author?(answer)
+    = render 'shared/vote_buttons', resource: answer
 
   -if answer.links.any?
     = render 'shared/links', resource: answer

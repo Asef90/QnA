@@ -85,6 +85,75 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'POST #vote' do
+    context 'Authenticated user' do
+      context "tries to vote for another user's question" do
+        before do
+          login(another_user)
+        end
+
+        it 'adds vote to question if voted up' do
+          expect { post :vote, params: { id: question, value: 1 }, format: :json }.to change(question.votes, :count).by(1)
+        end
+
+        it 'does not add second vote to question if voted up from the same user' do
+          expect do
+            post :vote, params: { id: question, value: 1 }, format: :json
+            post :vote, params: { id: question, value: 1 }, format: :json
+          end.to change(question.votes, :count).by(1)
+        end
+
+        it 'adds vote to question if voted down' do
+          expect { post :vote, params: { id: question, value: -1 }, format: :json }.to change(question.votes, :count).by(1)
+        end
+
+        it 'does not add second vote to question if voted down from the same user' do
+          expect do
+            post :vote, params: { id: question, value: -1 }, format: :json
+            post :vote, params: { id: question, value: -1 }, format: :json
+          end.to change(question.votes, :count).by(1)
+        end
+
+        it 'does not add vote to question if voted up and down' do
+          expect do
+            post :vote, params: { id: question, value: 1 }, format: :json
+            post :vote, params: { id: question, value: -1 }, format: :json
+          end.not_to change(question.votes, :count)
+        end
+
+        it 'renders json response with question id, class name and votes number' do
+          expected = { id: question.id, type: "Question", number: question.votes_number + 1 }.to_json
+
+          post :vote, params: { id: question, value: 1 }, format: :json
+          expect(response.body).to eq expected
+        end
+      end
+
+      context "tries to vote for his question" do
+        before do
+          login(user)
+        end
+
+        it 'does not adds vote to question if voted up' do
+          expect { post :vote, params: { id: question, value: 1 }, format: :json }.not_to change(question.votes, :count)
+        end
+
+        it 'does not adds vote to question if voted down' do
+          expect { post :vote, params: { id: question, value: -1 }, format: :json }.not_to change(question.votes, :count)
+        end
+
+        it 'renders No roots' do
+          post :vote, params: { id: question, value: 1 }, format: :json
+          expect(response.body).to eq "No roots"
+        end
+      end
+    end
+
+    context 'Unauthenticated user tries to set best mark to answer to question' do
+      it 'responses with code 401'
+    end
+  end
+
   describe 'PATCH #update' do
     context 'Authenticated user' do
       before { login(user) }
