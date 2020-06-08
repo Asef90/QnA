@@ -1,10 +1,10 @@
-= link_to '+', send("vote_#{resource.class.name.downcase}_path", resource, value: 1),
+= link_to '+', polymorphic_path([:vote_up, resource]),
                method: :post,
                remote: true,
                data: { type: :json },
                class: 'vote'
 
-= link_to '-', send("vote_#{resource.class.name.downcase}_path", resource, value: -1),
+= link_to '-', polymorphic_path([:vote_down, resource]),
                method: :post,
                remote: true,
                data: { type: :json },

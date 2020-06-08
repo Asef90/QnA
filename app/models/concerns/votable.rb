@@ -5,6 +5,12 @@ module Votable
   end
 
   def votes_number
-    votes.sum('value')
+    votes.sum(:value)
+  end
+
+  def process_vote(user:, value:)
+    vote = votes.find_by(user_id: user.id)
+    votes.destroy(vote) if vote && (-vote.value == value)
+    votes.create(user_id: user.id, value: value) unless vote
   end
 end

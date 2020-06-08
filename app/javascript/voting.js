@@ -1,10 +1,11 @@
 $(document).on('turbolinks:load', function() {
   $("a.vote").on('ajax:success', function(e) {
 
-
-    var votesNumber = e.detail[0].number;
-    var votableId = e.detail[0].id;
-    var votableType = e.detail[0].type.toLowerCase();
+    var responseObject = e.detail[0];
+    
+    var votesNumber = responseObject.number;
+    var votableId = responseObject.id;
+    var votableType = responseObject.type.toLowerCase();
 
     $(`#${votableType}-votes-number-${votableId}`).text(votesNumber);
   })

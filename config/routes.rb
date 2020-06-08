@@ -4,13 +4,19 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :questions do
-    resources :answers, shallow: true do
-      member { patch :set_best }
-      member { post :vote }
+  concern :votable do
+    member do
+      post :vote_up
+      post :vote_down
     end
-    
-    member { post :vote }
+  end
+
+  resources :questions, concerns: :votable do
+    resources :answers, shallow: true, concerns: :votable do
+      member do
+        patch :set_best
+      end
+    end
   end
 
   resources :attachments, only: :destroy
