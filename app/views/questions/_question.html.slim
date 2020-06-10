@@ -1,15 +1,22 @@
 .question
   h1= @question.title
-  p= @question.body
+  p
+    = @question.body
 
-  -if @question.links.any?
-    = render 'shared/links', resource: @question
+    p id="question-votes-number-#{question.id}"
+      = question.votes_number
 
-  -if @question.files.attached?
-    = render 'shared/files', resource: @question
+    -if current_user && !current_user.author?(@question)
+      = render 'shared/vote_buttons', resource: @question
 
-  -if current_user&.author?(@question)
-    p= render 'edit_form', question: @question
+    -if @question.links.any?
+      = render 'shared/links', resource: @question
+
+    -if @question.files.attached?
+      = render 'shared/files', resource: @question
+
+    -if current_user&.author?(@question)
+      p= render 'edit_form', question: @question
 
 .answers
   = render @question.answers

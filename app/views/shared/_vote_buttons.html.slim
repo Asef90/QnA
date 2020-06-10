@@ -1,0 +1,11 @@
+= link_to '+', polymorphic_path([:vote_up, resource]),
+               method: :post,
+               remote: true,
+               data: { type: :json },
+               class: 'vote'
+
+= link_to '-', polymorphic_path([:vote_down, resource]),
+               method: :post,
+               remote: true,
+               data: { type: :json },
+               class: 'vote'
