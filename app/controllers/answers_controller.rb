@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
   before_action :set_question, only: %i[new create]
 
   include Voted
-  
+
   def show
 
   end

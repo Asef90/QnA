@@ -2,7 +2,7 @@ $(document).on('turbolinks:load', function() {
   $("a.vote").on('ajax:success', function(e) {
 
     var responseObject = e.detail[0];
-    
+
     var votesNumber = responseObject.number;
     var votableId = responseObject.id;
     var votableType = responseObject.type.toLowerCase();
@@ -14,4 +14,4 @@ $(document).on('turbolinks:load', function() {
 
       $('.no-roots').text(error)
     })
-})
+});
