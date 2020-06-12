@@ -18,6 +18,8 @@ feature 'User can view the list of his rewards', %q{
 
     click_on 'My rewards'
 
+    sleep(10)
+
     expect(page).to have_content reward.question.title
     expect(page).to have_content reward.title
     expect(page.find('img')['src']).to have_content reward.image.filename.to_s

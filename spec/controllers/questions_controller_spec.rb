@@ -85,7 +85,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'POST #vote' do
+  describe 'POST #vote_up' do
     context 'Authenticated user' do
       context "tries to vote up for another user's question" do
         before do
@@ -185,6 +185,40 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Unauthenticated user tries to vote for question' do
+      it 'responses with code 401'
+    end
+  end
+
+  describe 'POST #create_comment' do
+    before { login(user) }
+
+    context 'with valid attributes' do
+      it 'saves a new comment in the database' do
+        expect { post :create_comment, params: { id: question.id, comment: attributes_for(:comment) }, format: :json }
+        .to change(question.comments, :count).by(1)
+      end
+
+      it 'responses 204 no content' do
+        post :create_comment, params: { id: question.id, comment: attributes_for(:comment) }, format: :json
+        expect(response.code).to eq "204"
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not save the comment' do
+        expect { post :create_comment, params: { id: question.id, comment: attributes_for(:comment, :invalid) }, format: :json }
+        .to_not change(question.comments, :count)
+      end
+
+      it 'renders errors json' do
+        expected = { errors: ["Body can't be blank"] }.to_json
+
+        post :create_comment, params: { id: question.id, comment: attributes_for(:comment, :invalid) }, format: :json
+        expect(response.body).to eq expected
+      end
+    end
+
+    context 'Unauthenticated user tries to vote up for question' do
       it 'responses with code 401'
     end
   end

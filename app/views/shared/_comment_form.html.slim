@@ -6,7 +6,7 @@
 = form_with model: comment, url: polymorphic_path([:create_comment, commentable]), class: 'add-comment-form hidden',
             html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" } do |f|
   p
-    = f.label :body
+    = f.label :body, for: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"
     = f.text_area :body, id: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"
 
   p= f.submit 'Save'

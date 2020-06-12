@@ -46,6 +46,8 @@ feature 'User can create answer', %q{
 
         click_on 'My rewards'
 
+        sleep(10)
+
         expect(page).to have_content question_with_reward.title
         expect(page).to have_content question_with_reward.reward.title
         expect(page.find('img')['src']).to have_content question_with_reward.reward.image.filename.to_s

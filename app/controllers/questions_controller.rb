@@ -12,7 +12,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.build
-    @comment = Comment.new
+    # @comment = Comment.new
   end
 
   def new

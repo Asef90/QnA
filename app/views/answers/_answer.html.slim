@@ -24,9 +24,8 @@ div class='answer' id="answer-#{answer.id}"
                        id: "set-best-answer-#{answer.id}"
 
   div id='answer-comments-#{answer.id}'
-    | Comments:
+    | Answer comments:
     = render partial:'shared/comment', collection: answer.comments, as: :comment
 
   -if current_user
-
-    p= render 'shared/comment_form', commentable: answer, comment: @comment
+    p= render 'shared/comment_form', commentable: answer, comment: Comment.new
