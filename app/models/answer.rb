@@ -1,6 +1,7 @@
 class Answer < ApplicationRecord
   include Attachable
   include Authorable
+  include Commentable
   include Linkable
   include Votable
 

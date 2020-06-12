@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function() {
-  $("a.vote").on('ajax:success', function(e) {
+  $("#question").on('ajax:success', 'a.vote', function(e) {
 
     var responseObject = e.detail[0];
 

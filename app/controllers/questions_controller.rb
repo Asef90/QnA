@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show update destroy]
 
+  include Commented
   include Voted
 
   def index
@@ -11,6 +12,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.build
+    @comment = Comment.new
   end
 
   def new
