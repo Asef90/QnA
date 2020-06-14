@@ -32,6 +32,8 @@ feature 'User can delete file', %q{
           end
         end
 
+        sleep(10)
+
         within '.question' do
           expect(page).not_to have_link 'image.jpg'
         end
@@ -45,6 +47,8 @@ feature 'User can delete file', %q{
             click_on 'Delete file'
           end
         end
+
+        sleep(10)
 
         within '.answers' do
           expect(page).not_to have_link 'image.jpg'

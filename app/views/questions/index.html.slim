@@ -3,6 +3,6 @@ p= link_to 'Ask question', new_question_path
 h1 All questions
 
 div
-  ol
+  ol id="questions-list"
     -@questions.each do |question|
       li= link_to question.title, question

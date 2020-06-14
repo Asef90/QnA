@@ -1,6 +1,7 @@
 class Answer < ApplicationRecord
   include Attachable
   include Authorable
+  include Commentable
   include Linkable
   include Votable
 
@@ -8,7 +9,11 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create_commit :publish
+
   default_scope { order(best_mark: :desc) }
+
+
 
   def set_best_mark
     unless best?
@@ -22,6 +27,18 @@ class Answer < ApplicationRecord
 
   def best?
     best_mark
+  end
+
+  private
+
+  def publish
+    files_data = []
+    files.each {|file| files_data.push(name: file.filename.to_s, url: file.service_url)}
+
+    AnswersChannel.broadcast_to question, answer: self,
+                                          files: files_data,
+                                          links: links,
+                                          question_author_id: question.author_id
   end
 
 end

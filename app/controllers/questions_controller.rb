@@ -2,15 +2,17 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show update destroy]
 
+  include Commented
   include Voted
 
   def index
-    @questions = Question.all
+    @questions = Question.order(:id)
   end
 
   def show
     @answer = Answer.new
     @answer.links.build
+    # @comment = Comment.new
   end
 
   def new
@@ -23,6 +25,7 @@ class QuestionsController < ApplicationController
     @question = current_user.questions.build(question_params)
 
     if @question.save
+      ActionCable.server.broadcast 'questions', @question
       redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new
