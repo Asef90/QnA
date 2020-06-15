@@ -4,6 +4,12 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { omniauth_callbacks: :oauth_callbacks }
 
+  namespace :authorizations do
+    get :confirmation
+    patch :handle
+    get :confirm
+  end
+
   concern :votable do
     member do
       post :vote_up
@@ -26,6 +32,7 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :rewards, only: :index
+
 
   mount ActionCable.server, at: '/cable'
 end

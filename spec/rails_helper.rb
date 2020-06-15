@@ -73,6 +73,8 @@ RSpec.configure do |config|
   config.after(:all) do
     FileUtils.rm_rf("#{Rails.root}/tmp/storage")
   end
+
+  RSpec::Mocks.configuration.allow_message_expectations_on_nil = true
 end
 
 Shoulda::Matchers.configure do |config|

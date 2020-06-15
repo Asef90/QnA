@@ -6,12 +6,14 @@ RSpec.describe OauthCallbacksController, type: :controller do
   end
 
   describe 'Github' do
-    let(:oauth_data) { { provider: 'github', uid: '123' } }
+    let!(:oauth_data) { OmniAuth::AuthHash.new(provider: 'github', uid: '123') }
 
-    it 'finds user from oauth data' do
+    before do
       allow(request.env).to receive(:[]).and_call_original
       allow(request.env).to receive(:[]).with('omniauth.auth').and_return(oauth_data)
+    end
 
+    it 'finds user from oauth data' do
       expect(User).to receive(:from_omniauth).with(oauth_data)
       get :github
     end
@@ -43,8 +45,13 @@ RSpec.describe OauthCallbacksController, type: :controller do
         expect(subject.current_user).not_to be
       end
 
-      it 'redirects to root path' do
-        expect(response).to redirect_to root_path
+      it 'adds to session provider and uid values' do
+        expect(session[:provider]).to eq oauth_data.provider
+        expect(session[:uid]).to eq oauth_data.uid
+      end
+
+      it 'redirects to enter email for confirmation path' do
+        expect(response).to redirect_to authorizations_confirmation_path
       end
     end
   end

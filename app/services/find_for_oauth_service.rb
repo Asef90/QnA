@@ -6,18 +6,14 @@ class FindForOauthService
   end
 
   def call
-    authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s)
+    authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s, confirmed: true)
     return authorization.user if authorization
 
-    email = auth.info[:email]
-    user = User.find_by(email: email)
-
-    unless user
-      password = Devise.friendly_token[0, 20]
-      user = User.create!(email: email, password: password, password_confirmation: password)
+    authorization = Authorization.create(provider: auth.provider, uid: auth.uid.to_s)
+    if email = auth.info[:email]
+      user = User.find_or_create(email)
+      authorization.update(user_id: user.id, confirmed: true)
     end
-    user.authorizations.create(provider: auth.provider, uid: auth.uid.to_s)
-
     user
   end
 end

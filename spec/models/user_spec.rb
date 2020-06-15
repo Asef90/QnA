@@ -25,6 +25,36 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.find_or_create' do
+    let!(:user) { create(:user) }
+
+    context 'user exists' do
+      it 'does not create new user' do
+        expect { User.find_or_create(user.email) }.not_to change(User, :count)
+      end
+
+      it 'returns the user' do
+        expect(User.find_or_create(user.email)).to eq user
+      end
+
+    end
+
+    context 'user does not exists' do
+      it 'creates new user' do
+        expect { User.find_or_create('user@user.user') }.to change(User, :count).by(1)
+      end
+
+      it 'returns new user' do
+        expect(User.find_or_create('user@user.user')).to be_a(User)
+      end
+
+      it 'fills user email' do
+        user = User.find_or_create('user@user.user')
+        expect(user.email).to eq 'user@user.user'
+      end
+    end
+  end
+
   describe '#author?' do
     it 'should return true if user is an author of the resource' do
       expect(users.first).to be_author(question)
