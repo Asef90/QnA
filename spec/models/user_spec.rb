@@ -4,12 +4,26 @@ RSpec.describe User, type: :model do
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:rewards) }
+  it { should have_many(:authorizations).dependent(:destroy) }
 
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
 
   let(:users) { create_list(:user, 2) }
   let(:question) { create(:question, author: users.first) }
+
+  describe '.from_omniauth' do
+    let!(:user) { create(:user) }
+    let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456') }
+    let(:service) { double('FindForOauthService') }
+
+    it 'calls FindForOauthService' do
+      expect(FindForOauthService).to receive(:new).with(auth).and_return(service)
+      expect(service).to receive(:call)
+
+      User.from_omniauth(auth)
+    end
+  end
 
   describe '#author?' do
     it 'should return true if user is an author of the resource' do

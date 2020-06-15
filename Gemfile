@@ -33,6 +33,9 @@ gem 'aws-sdk-s3', require: false
 gem 'cocoon'
 gem "octokit", "~> 4.0"
 gem "gon"
+gem "omniauth"
+gem "omniauth-github"
+gem 'omniauth-vkontakte'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
