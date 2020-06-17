@@ -1,10 +1,11 @@
 class AuthorizationsController < ApplicationController
-  before_action :set_authorization, only: %i[handle confirm]
+  # before_action :set_authorization, only: %i[handle confirm]
 
   def confirmation
   end
 
   def handle
+    @authorization = Authorization.find_by(provider: session[:provider], uid: session[:uid])
     @authorization.update(token: rand(1<<20..1<<30))
 
     session[:user_email] = params[:email]
@@ -12,6 +13,7 @@ class AuthorizationsController < ApplicationController
   end
 
   def confirm
+    @authorization = Authorization.find_by(provider: session[:provider], uid: session[:uid])
     if @authorization.token == params[:token].to_i
       user = User.find_or_create(session[:user_email])
       @authorization.update(user_id: user.id, confirmed: true)
@@ -22,7 +24,7 @@ class AuthorizationsController < ApplicationController
 
   private
 
-  def set_authorization
-    @authorization = Authorization.find_by(provider: session[:provider], uid: session[:uid])
-  end
+  # def set_authorization
+  #   @authorization = Authorization.find_by(provider: session[:provider], uid: session[:uid])
+  # end
 end

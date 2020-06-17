@@ -36,6 +36,8 @@ gem "gon"
 gem "omniauth"
 gem "omniauth-github"
 gem 'omniauth-vkontakte'
+gem 'capybara-email'
+gem 'rack_session_access'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
