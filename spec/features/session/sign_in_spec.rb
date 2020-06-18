@@ -29,7 +29,7 @@ feature 'User can sign in', %q{
 
   describe 'Sign in with Oauth services' do
     describe "returning user's email" do
-      it 'sign in' do
+      scenario 'sign in' do
         expect(page).to have_content("Sign in with GitHub")
         mock_github
         click_on "Sign in with GitHub"
@@ -40,30 +40,40 @@ feature 'User can sign in', %q{
     end
 
     describe "not returning user's email" do
-      it "sign in after email confirmation" do
+
+      before do
         expect(page).to have_content("Sign in with Vkontakte")
         mock_vkontakte
         click_on "Sign in with Vkontakte"
 
         fill_in 'Email', with: user.email
+
         click_on 'Send email'
 
         expect(page).to have_content('Confirmation email has been sent to your email.')
+      end
 
+      scenario "signs in after email confirmation" do
         open_email(user.email)
-        current_email.click_link 'Confirm'
-     #    По клику Confirm выдаёт следующую ошибку
-     #    Failure/Error: if @authorization.token == params[:token].to_i
-     #    NoMethodError:
-     #    undefined method `token' for nil:NilClass
+        current_email.click_on 'Confirm'
 
         expect(page).to have_content('Thanks for confirming your mail.')
 
         visit new_user_session_path
+
         click_on "Sign in with Vkontakte"
 
         expect(page).to have_link "Sign out"
         expect(page).to have_content 'Successfully authenticated from Vkontakte account.'
+      end
+
+      scenario "does not sign in after email confirmation" do
+        visit new_user_session_path
+
+        click_on "Sign in with Vkontakte"
+
+        expect(page).not_to have_link "Sign out"
+        expect(page).not_to have_content 'Successfully authenticated from Vkontakte account.'
       end
     end
   end
