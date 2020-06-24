@@ -2,7 +2,13 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'questions#index'
 
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: :oauth_callbacks }
+
+  namespace :authorizations do
+    get :confirmation
+    patch :handle
+    get :confirm
+  end
 
   concern :votable do
     member do
@@ -26,6 +32,7 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :rewards, only: :index
+
 
   mount ActionCable.server, at: '/cable'
 end

@@ -1,0 +1,4 @@
+h1 Please click on this link to confirm your email:
+
+p
+  = link_to 'Confirm', authorizations_confirm_url(id: @id, token: @token, email: @email)

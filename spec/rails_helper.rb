@@ -5,6 +5,8 @@ require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'capybara/email/rspec'
+require "rack_session_access/capybara"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -37,6 +39,7 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include ActiveStorageHelpers
   config.include WaitForAjax, type: :feature
+  config.include OmniauthHelpers, type: :feature
 
   #use Chromium for js testing
   Capybara.javascript_driver = :selenium_chrome_headless
@@ -73,6 +76,8 @@ RSpec.configure do |config|
   config.after(:all) do
     FileUtils.rm_rf("#{Rails.root}/tmp/storage")
   end
+
+  RSpec::Mocks.configuration.allow_message_expectations_on_nil = true
 end
 
 Shoulda::Matchers.configure do |config|
@@ -81,3 +86,5 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+OmniAuth.config.test_mode = true

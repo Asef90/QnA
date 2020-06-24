@@ -1,0 +1,9 @@
+h2 Please enter your email:
+
+= form_with url: authorizations_handle_path, local: true, method: :patch do |f|
+  p
+    = f.label :email
+    br
+    = f.text_field :email
+
+  p= f.submit 'Send email'
