@@ -9,4 +9,9 @@ $(document).on('turbolinks:load', function() {
 
     $(`#${votableType}-votes-number-${votableId}`).text(votesNumber);
   })
+    .on('ajax:error', function(e) {
+      var error = e.detail[0]
+
+      $('.no-roots').text(error)
+    })
 });

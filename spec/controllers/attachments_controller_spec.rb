@@ -30,9 +30,9 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: file }, format: :js }.not_to change(ActiveStorage::Attachment, :count)
       end
 
-      it 'redirects to root_path' do
+      it 'renders no roots template' do
         delete :destroy, params: { id: file }, format: :js
-        expect(response).to redirect_to root_path
+        expect(response).to render_template 'shared/_no_roots'
       end
     end
 

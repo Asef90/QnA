@@ -24,8 +24,8 @@ class Ability
     can :destroy, ActiveStorage::Attachment, record: { author_id: user.id }
     can :destroy, Link, linkable: { author_id: user.id }
 
-    can [:vote_up, :vote_down], [Question, Answer] do |question|
-      question.author_id != user.id
+    can [:vote_up, :vote_down], [Question, Answer] do |votable|
+      !user.author?(votable)
     end
   end
 end
