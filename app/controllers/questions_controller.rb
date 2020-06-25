@@ -1,9 +1,11 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  # before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show update destroy]
 
   include Commented
   include Voted
+
+  authorize_resource
 
   def index
     @questions = Question.order(:id)
@@ -33,21 +35,13 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author?(@question)
-      @question.update(question_params)
-      @answer = Answer.new
-    else
-      render 'shared/_no_roots'
-    end
+    @question.update(question_params)
+    @answer = Answer.new
   end
 
   def destroy
-    if current_user.author?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: 'Your question successfully deleted.'
-    else
-      redirect_to questions_path, notice: 'Not enough access rights.'
-    end
+    @question.destroy
+    redirect_to questions_path, notice: 'Your question successfully deleted.'
   end
 
   private

@@ -14,10 +14,6 @@ RSpec.describe AnswersController, type: :controller do
     it 'assigns the requested answer to @answer' do
       expect(assigns(:answer)).to eq answer
     end
-
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
   end
 
   describe 'GET #new' do
@@ -117,9 +113,9 @@ RSpec.describe AnswersController, type: :controller do
           end.to_not change(answer, :body)
         end
 
-        it 'renders no roots template' do
+        it 'redirects to root path' do
           patch :update, params: { id: answer, answer: { body: 'new body'} }, format: :js
-          expect(response).to render_template 'shared/_no_roots'
+          expect(response).to redirect_to root_path
         end
       end
     end
@@ -170,8 +166,8 @@ RSpec.describe AnswersController, type: :controller do
           expect(assigns(:answer)).not_to be_best
         end
 
-        it 'renders no roots template' do
-          expect(response).to render_template 'shared/_no_roots'
+        it 'redirects to root path' do
+          expect(response).to redirect_to root_path
         end
       end
     end
@@ -210,9 +206,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer }, format: :js }.not_to change(Answer, :count)
       end
 
-      it 'renders no roots template' do
+      it 'redirects to root path' do
         delete :destroy, params: { id: answer }, format: :js
-        expect(response).to render_template 'shared/_no_roots'
+        expect(response).to redirect_to root_path
       end
     end
 

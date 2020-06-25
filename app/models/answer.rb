@@ -1,4 +1,6 @@
 class Answer < ApplicationRecord
+  BUCKET_PATH = 'https://qna-files.s3-eu-west-1.amazonaws.com/'
+
   include Attachable
   include Authorable
   include Commentable
@@ -12,8 +14,6 @@ class Answer < ApplicationRecord
   after_create_commit :publish
 
   default_scope { order(best_mark: :desc) }
-
-
 
   def set_best_mark
     unless best?
@@ -33,7 +33,7 @@ class Answer < ApplicationRecord
 
   def publish
     files_data = []
-    files.each {|file| files_data.push(name: file.filename.to_s, url: file.service_url)}
+    files.each {|file| files_data.push(name: file.filename.to_s, url: "#{BUCKET_PATH}#{file.key}")}
 
     AnswersChannel.broadcast_to question, answer: self,
                                           files: files_data,

@@ -125,9 +125,9 @@ RSpec.describe QuestionsController, type: :controller do
           expect { post :vote_up, params: { id: question }, format: :json }.not_to change(question.votes, :count)
         end
 
-        it 'renders No roots' do
+        it 'redirects to root_path' do
           post :vote_up, params: { id: question }, format: :json
-          expect(response.body).to eq "No roots"
+          expect(response.body).to redirect_to root_path
         end
       end
     end
@@ -177,9 +177,9 @@ RSpec.describe QuestionsController, type: :controller do
           expect { post :vote_down, params: { id: question }, format: :json }.not_to change(question.votes, :count)
         end
 
-        it 'renders No roots' do
+        it 'redirects to root path' do
           post :vote_down, params: { id: question }, format: :json
-          expect(response.body).to eq "No roots"
+          expect(response.body).to redirect_to root_path
         end
       end
     end
@@ -271,9 +271,9 @@ RSpec.describe QuestionsController, type: :controller do
           end.to_not change(question, :body)
         end
 
-        it 'renders no_roots template' do
+        it 'redirects to root_path' do
           patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
-          expect(response).to render_template 'shared/_no_roots'
+          expect(response).to redirect_to root_path
         end
       end
     end
@@ -317,9 +317,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
 
-      it 'redirects to sign in view' do
+      it 'redirects to root path' do
         delete :destroy, params: { id: question }
-        expect(response).to redirect_to questions_path
+        expect(response).to redirect_to root_path
       end
     end
 
@@ -328,9 +328,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
 
-      it 'redirects to sign in view' do
+      it 'redirects to root path' do
         delete :destroy, params: { id: question }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
     end
   end

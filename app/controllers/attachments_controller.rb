@@ -1,13 +1,11 @@
 class AttachmentsController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   before_action :set_attachment, only: %i[destroy]
 
+  authorize_resource
+
   def destroy
-    if current_user.author?(@attachment.record)
-      @attachment.purge
-    else
-      render 'shared/_no_roots'
-    end
+    @attachment.purge
   end
 
   private

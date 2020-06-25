@@ -1,9 +1,11 @@
 test:
-  service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-  region: eu-west-1
-  bucket: qna-test-files
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+  # service: S3
+  # access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
+  # secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
+  # region: eu-west-1
+  # bucket: qna-test-files
 
 local:
   service: Disk
