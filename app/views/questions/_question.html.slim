@@ -6,7 +6,7 @@
     p id="question-votes-number-#{question.id}"
       = question.votes_number
 
-    -if current_user && !current_user.author?(@question)
+    -if can?(:vote_up, @question)
       = render 'shared/vote_buttons', resource: @question
 
     -if @question.links.any?
@@ -15,17 +15,17 @@
     -if @question.files.attached?
       = render 'shared/files', resource: @question
 
-    -if current_user&.author?(@question)
+    -if can?(:update, @question)
       p= render 'edit_form', question: @question
 
     div id='question-comments-#{@question.id}'
       | Question comments:
       = render partial:'shared/comment', collection: @question.comments, as: :comment
 
-    -if current_user
+    -if can?(:create_comment, @question)
       p= render 'shared/comment_form', commentable: @question, comment: Comment.new
 
 .answers
   = render @question.answers
 
-p= render 'answers/form' if current_user
+p= render 'answers/form' if can?(:create, Answer)

@@ -7,8 +7,8 @@ ul
       -if link.gist_link? && content = gist_content(link)
         = render 'shared/gist', content: content
 
-      -if current_user&.author?(link.linkable)
-        | | 
+      -if can?(:destroy, link)
+        | |
         = link_to 'Delete link', link_path(link),
                                  method: :delete,
                                  remote: true,

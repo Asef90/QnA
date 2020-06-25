@@ -1,10 +1,12 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   before_action :set_answer, only: %i[show update destroy set_best]
   before_action :set_question, only: %i[new create]
 
   include Commented
   include Voted
+
+  authorize_resource
 
   def show
 
@@ -21,30 +23,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author?(@answer)
-      @answer.update(answer_params)
-      @question = @answer.question
-    else
-      render 'shared/_no_roots'
-    end
+    @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def set_best
     question = @answer.question
-
-    if current_user.author?(question)
-      @answer.set_best_mark
-    else
-      render 'shared/_no_roots'
-    end
+    @answer.set_best_mark
   end
 
   def destroy
-    if current_user.author?(@answer)
-      @answer.destroy
-    else
-      render 'shared/_no_roots'
-    end
+    @answer.destroy
   end
 
   private

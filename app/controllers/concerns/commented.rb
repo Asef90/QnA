@@ -5,6 +5,7 @@ module Commented
   end
 
   def create_comment
+    authorize! :create_comment, @commentable
     @comment = @commentable.comments.build(comment_params)
     @comment.author = current_user
     if @comment.save

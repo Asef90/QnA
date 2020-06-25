@@ -317,9 +317,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
 
-      it 'redirects to sign in view' do
+      it 'redirects to root path' do
         delete :destroy, params: { id: question }
-        expect(response).to redirect_to questions_path
+        expect(response).to redirect_to root_path
       end
     end
 
@@ -328,9 +328,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.not_to change(user.questions, :count)
       end
 
-      it 'redirects to sign in view' do
+      it 'redirects to root path' do
         delete :destroy, params: { id: question }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
     end
   end
