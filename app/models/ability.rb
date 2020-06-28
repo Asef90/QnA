@@ -11,7 +11,7 @@ class Ability
   end
 
   def guest_abilities
-    can :read, Question
+    can :read, [Question, Answer]
   end
 
   def user_abilities

@@ -1,5 +1,4 @@
 class Answer < ApplicationRecord
-  BUCKET_PATH = 'https://qna-files.s3-eu-west-1.amazonaws.com/'
 
   include Attachable
   include Authorable
@@ -33,7 +32,7 @@ class Answer < ApplicationRecord
 
   def publish
     files_data = []
-    files.each {|file| files_data.push(name: file.filename.to_s, url: "#{BUCKET_PATH}#{file.key}")}
+    files.each {|file| files_data.push(name: file.filename.to_s, url: Rails.application.routes.url_helpers.rails_blob_url(file))}
 
     AnswersChannel.broadcast_to question, answer: self,
                                           files: files_data,

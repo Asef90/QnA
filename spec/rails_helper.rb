@@ -41,6 +41,7 @@ RSpec.configure do |config|
   config.include ActiveStorageHelpers
   config.include WaitForAjax, type: :feature
   config.include OmniauthHelpers, type: :feature
+  config.include ApiHelpers, type: :request
 
   #use Chromium for js testing
   Capybara.javascript_driver = :selenium_chrome_headless
