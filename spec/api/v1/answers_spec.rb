@@ -45,11 +45,11 @@ describe 'Answers API', type: :request do
     context 'authorized' do
       let!(:links) { create_list(:link, 3, :for_answer, linkable: answer) }
       let!(:comments) { create_list(:comment, 4, :for_answer, commentable: answer) }
-      # let(:file) { question.files.first }
+      let(:file) { answer.files.first }
       let(:answer_response) { json['answer'] }
 
       before do
-        # question.files.attach(create_file_blob)
+        answer.files.attach(create_file_blob)
         get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token }, headers: headers
       end
 
@@ -85,6 +85,10 @@ describe 'Answers API', type: :request do
         end
 
         expect(response_comment_ids).to match_array Comment.ids
+      end
+
+      it 'returns files' do
+        expect(answer_response['files'].first['url']).to eq Rails.application.routes.url_helpers.rails_blob_url(file)
       end
     end
   end
