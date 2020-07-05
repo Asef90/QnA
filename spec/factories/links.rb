@@ -3,9 +3,13 @@ FactoryBot.define do
     "LinkName#{n}"
   end
 
+  sequence :url do |u|
+    "http://www.test-url-#{u}.com"
+  end
+
   factory :link do
     name
-    url { "http://www.test-url.com" }
+    url
 
     trait :for_question do
       association :linkable, factory: :question
