@@ -16,6 +16,7 @@ class Ability
 
   def user_abilities
     guest_abilities
+    can [:index, :me], User
     can :create, [Question, Answer]
     can :create_comment, [Question, Answer]
     can [:update, :destroy], [Question, Answer], { author_id: user.id }
