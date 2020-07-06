@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: %i[show update destroy]
 
   include Commented
+  include Subscripted
   include Voted
 
   authorize_resource
@@ -27,6 +28,7 @@ class QuestionsController < ApplicationController
     @question = current_user.questions.build(question_params)
 
     if @question.save
+      current_user.subscripted_questions.push(@question)
       ActionCable.server.broadcast 'questions', @question
       redirect_to @question, notice: 'Your question successfully created.'
     else

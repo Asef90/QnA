@@ -9,6 +9,9 @@
     -if can?(:vote_up, @question)
       = render 'shared/vote_buttons', resource: @question
 
+    -if can?(:subscribe, @question)
+      = render 'shared/subscribe_buttons', resource: @question
+
     -if @question.links.any?
       = render 'shared/links', resource: @question
 

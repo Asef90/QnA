@@ -24,6 +24,7 @@ class Ability
     can :index, Reward, { user_id: user.id }
     can :destroy, ActiveStorage::Attachment, record: { author_id: user.id }
     can :destroy, Link, linkable: { author_id: user.id }
+    can [:subscribe, :unsubscribe], Question
 
     can [:vote_up, :vote_down], [Question, Answer] do |votable|
       !user.author?(votable)

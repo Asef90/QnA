@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   it_behaves_like 'commented'
+  it_behaves_like 'subscripted'
   it_behaves_like 'voted'
 
   let(:user) { create(:user) }
@@ -68,6 +69,10 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(user.questions, :count).by(1)
+      end
+
+      it 'adds subscription on question to author of question' do
+        expect { post :create, params: { question: attributes_for(:question) } }.to change(user.subscripted_questions, :count).by(1)
       end
 
       it 'redirects to show view' do

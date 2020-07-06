@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :answers, foreign_key: :author_id, dependent: :destroy
   has_many :rewards
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscripted_questions, through: :subscriptions, source: :subscriptable, source_type: 'Question'
 
   def self.from_omniauth(auth)
     FindForOauthService.new(auth).call

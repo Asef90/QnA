@@ -1,0 +1,11 @@
+= link_to 'Unsubscribe', polymorphic_path([:unsubscribe, resource]),
+                         method: :patch,
+                         remote: true,
+                         data: { type: :json },
+                         class: "unsubscribe #{'hidden' unless subscripted_resource?(resource)}"
+
+= link_to 'Subscribe', polymorphic_path([:subscribe, resource]),
+                       method: :patch,
+                       remote: true,
+                       data: { type: :json },
+                       class: "subscribe #{'hidden' if subscripted_resource?(resource)}"
