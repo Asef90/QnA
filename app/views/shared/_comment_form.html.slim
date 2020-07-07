@@ -3,7 +3,7 @@
 
 .comment-errors
 
-= form_with model: comment, url: polymorphic_path([:create_comment, commentable]), class: 'add-comment-form hidden',
+= form_with model: comment, url: polymorphic_path([commentable, Comment]), class: 'add-comment-form hidden',
             html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" } do |f|
   p
     = f.label :body, for: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"

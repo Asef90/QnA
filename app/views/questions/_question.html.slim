@@ -9,7 +9,7 @@
     -if can?(:vote_up, @question)
       = render 'shared/vote_buttons', resource: @question
 
-    -if can?(:subscribe, @question)
+    -if can?(:create, Subscription)
       = render 'shared/subscribe_buttons', resource: @question
 
     -if @question.links.any?
@@ -25,7 +25,7 @@
       | Question comments:
       = render partial:'shared/comment', collection: @question.comments, as: :comment
 
-    -if can?(:create_comment, @question)
+    -if can?(:create, Comment)
       p= render 'shared/comment_form', commentable: @question, comment: Comment.new
 
 .answers

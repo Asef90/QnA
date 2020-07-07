@@ -34,29 +34,22 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :commentable do
-    member { post :create_comment }
-  end
+  resources :questions, concerns: [:votable]  do
+    resources :answers, shallow: true, concerns: [:votable] do
+      resources :comments, shallow: true, only: [:create], defaults: { commentable: 'answers'}
 
-  concern :subscriptable do
-    member do
-      patch :subscribe
-      patch :unsubscribe
+      member { patch :set_best }
     end
-  end
 
-  resources :questions, concerns: [:commentable, :subscriptable, :votable]  do
-    resources :answers, shallow: true, concerns: [:commentable, :votable] do
-      member do
-        patch :set_best
-      end
-    end
+    resources :comments, shallow: true, only: [:create], defaults: { commentable: 'questions'}
+
+    resources :subscriptions, shallow: true, only: [:create, :destroy],
+                              defaults: { subscriptable: 'questions'}
   end
 
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :rewards, only: :index
-
 
   mount ActionCable.server, at: '/cable'
 end

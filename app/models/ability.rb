@@ -18,13 +18,13 @@ class Ability
     guest_abilities
     can [:index, :me], User
     can :create, [Question, Answer]
-    can :create_comment, [Question, Answer]
     can [:update, :destroy], [Question, Answer], { author_id: user.id }
     can :set_best, Answer, question: { author_id: user.id }
+    can :create, Comment
     can :index, Reward, { user_id: user.id }
     can :destroy, ActiveStorage::Attachment, record: { author_id: user.id }
     can :destroy, Link, linkable: { author_id: user.id }
-    can [:subscribe, :unsubscribe], Question
+    can [:create, :destroy], Subscription
 
     can [:vote_up, :vote_down], [Question, Answer] do |votable|
       !user.author?(votable)
