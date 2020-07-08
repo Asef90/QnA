@@ -52,4 +52,13 @@ RSpec.describe Answer, type: :model do
       expect(answer).not_to be_best
     end
   end
+
+  describe '#notify_subscribers' do
+    let!(:answer) { build(:answer) }
+
+    it 'calls QuestionSubscribersJob' do
+      expect(QuestionSubscribersJob).to receive(:perform_later).with(answer)
+      answer.save
+    end
+  end
 end

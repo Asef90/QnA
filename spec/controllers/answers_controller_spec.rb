@@ -46,11 +46,6 @@ RSpec.describe AnswersController, type: :controller do
           expect(assigns(:answer).author).to eq user
         end
 
-        it 'calls QuestionSubscribersJob' do
-          expect { post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js }
-                                 .to have_enqueued_job(QuestionSubscribersJob)
-        end
-
         it 'renders create template' do
           post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
           expect(response).to render_template :create

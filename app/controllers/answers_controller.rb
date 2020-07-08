@@ -18,9 +18,7 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
-    if @answer.save
-      QuestionSubscribersJob.perform_later(@answer)
-    end
+    @answer.save
   end
 
   def update
