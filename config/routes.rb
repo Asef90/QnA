@@ -1,4 +1,7 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'questions#index'
 
@@ -31,22 +34,22 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :commentable do
-    member { post :create_comment }
-  end
+  resources :questions, concerns: [:votable]  do
+    resources :answers, shallow: true, concerns: [:votable] do
+      resources :comments, shallow: true, only: [:create], defaults: { commentable: 'answers'}
 
-  resources :questions, concerns: [:commentable, :votable]  do
-    resources :answers, shallow: true, concerns: [:commentable, :votable] do
-      member do
-        patch :set_best
-      end
+      member { patch :set_best }
     end
+
+    resources :comments, shallow: true, only: [:create], defaults: { commentable: 'questions'}
+
+    resources :subscriptions, shallow: true, only: [:create, :destroy],
+                              defaults: { subscriptable: 'questions'}
   end
 
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :rewards, only: :index
-
 
   mount ActionCable.server, at: '/cable'
 end

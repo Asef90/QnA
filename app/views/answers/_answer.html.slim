@@ -27,5 +27,5 @@ div class='answer' id="answer-#{answer.id}"
     | Answer comments:
     = render partial:'shared/comment', collection: answer.comments, as: :comment
 
-  -if can?(:create_comment, answer)
+  -if can?(:create, Comment)
     p= render 'shared/comment_form', commentable: answer, comment: Comment.new

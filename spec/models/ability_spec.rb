@@ -23,8 +23,10 @@ RSpec.describe Ability do
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
 
-    it { should be_able_to :create_comment, Question }
-    it { should be_able_to :create_comment, Answer }
+    it { should be_able_to :create, Comment }
+
+    it { should be_able_to :create, Subscription }
+    it { should be_able_to :destroy, Subscription }
 
     it { should be_able_to :update, question }
     it { should_not be_able_to :update, another_question }

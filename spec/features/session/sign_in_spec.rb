@@ -6,6 +6,8 @@ feature 'User can sign in', %q{
   I'd like to be able to sign in
 } do
 
+  include ActiveJob::TestHelper
+
   given(:user) { create(:user) }
   background { visit new_user_session_path }
 
@@ -48,13 +50,16 @@ feature 'User can sign in', %q{
 
         fill_in 'Email', with: user.email
 
-        click_on 'Send email'
+        perform_enqueued_jobs do
+          click_on 'Send email'
+        end
 
         expect(page).to have_content('Confirmation email has been sent to your email.')
       end
 
       scenario "signs in after email confirmation" do
         open_email(user.email)
+
         current_email.click_on 'Confirm'
 
         expect(page).to have_content('Thanks for confirming your mail.')

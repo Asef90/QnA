@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  it_behaves_like 'commented'
   it_behaves_like 'voted'
 
   let(:user) { create(:user) }
@@ -42,7 +41,7 @@ RSpec.describe AnswersController, type: :controller do
                                  format: :js }.to change(question.answers, :count).by(1)
         end
 
-        it 'associate answer with its author' do
+        it 'associates answer with its author' do
           post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
           expect(assigns(:answer).author).to eq user
         end

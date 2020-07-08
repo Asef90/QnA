@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AuthorizationsController, type: :controller do
+  include ActiveJob::TestHelper
+
   let(:user) { create(:user) }
   let!(:authorization) { create(:authorization) }
 
@@ -33,7 +35,7 @@ RSpec.describe AuthorizationsController, type: :controller do
     end
 
     it 'sends confirmation email to user' do
-      expect { patch :handle, params: { email: user.email } }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      expect { patch :handle, params: { email: user.email } }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
     end
   end
 

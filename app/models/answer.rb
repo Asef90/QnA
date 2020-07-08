@@ -10,6 +10,7 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create :notify_subscribers
   after_create_commit :publish
 
   default_scope { order(best_mark: :desc) }
@@ -29,6 +30,10 @@ class Answer < ApplicationRecord
   end
 
   private
+
+  def notify_subscribers
+    QuestionSubscribersJob.perform_later(self)
+  end
 
   def publish
     files_data = []

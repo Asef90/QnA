@@ -1,13 +1,12 @@
-module Commented
-  extend ActiveSupport::Concern
-  included do
-    before_action :set_commentable, only: %i[create_comment]
-  end
+class CommentsController < ApplicationController
+  before_action :set_commentable, only: %i[create]
 
-  def create_comment
-    authorize! :create_comment, @commentable
+  authorize_resource
+
+  def create
     @comment = @commentable.comments.build(comment_params)
     @comment.author = current_user
+
     if @comment.save
       publish_comment
     else
@@ -16,16 +15,21 @@ module Commented
   end
 
   private
+
   def comment_params
     params.require(:comment).permit(:body)
   end
 
+  def param
+    "#{params[:commentable].singularize}_id".to_sym
+  end
+
   def model_klass
-    controller_name.classify.constantize
+    params[:commentable].classify.constantize
   end
 
   def set_commentable
-    @commentable = model_klass.find(params[:id])
+    @commentable = model_klass.find(params[param])
   end
 
   def publish_comment
