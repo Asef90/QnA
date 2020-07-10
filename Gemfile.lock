@@ -105,6 +105,10 @@ GEM
     concurrent-ruby (1.1.6)
     connection_pool (2.2.3)
     crass (1.0.6)
+    database_cleaner (1.8.5)
+    database_cleaner-active_record (1.8.0)
+      activerecord
+      database_cleaner (~> 1.8.0)
     devise (4.7.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -133,9 +137,12 @@ GEM
     hashie (4.1.0)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
+    innertube (1.1.0)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
+    joiner (0.5.0)
+      activerecord (>= 6.0.0.rc2)
     jsonapi-renderer (0.2.2)
     jwt (2.2.1)
     launchy (2.5.0)
@@ -152,6 +159,7 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
+    middleware (0.1.0)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
@@ -162,6 +170,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    mysql2 (0.4.10)
     nio4r (2.5.2)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
@@ -242,6 +251,7 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
+    riddle (2.4.2)
     rspec-core (3.9.2)
       rspec-support (~> 3.9.3)
     rspec-expectations (3.9.1)
@@ -308,6 +318,13 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     temple (0.8.2)
+    thinking-sphinx (4.4.1)
+      activerecord (>= 3.1.0)
+      builder (>= 2.1.2)
+      innertube (>= 1.0.2)
+      joiner (>= 0.2.0)
+      middleware (>= 0.1.0)
+      riddle (~> 2.3)
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -352,6 +369,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   capybara-email
   cocoon
+  database_cleaner-active_record
   devise
   doorkeeper (= 5.1.1)
   factory_bot_rails
@@ -359,6 +377,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   launchy
   listen (>= 3.0.5, < 3.2)
+  mysql2 (~> 0.4.10)
   octokit (~> 4.0)
   oj
   omniauth
@@ -378,6 +397,7 @@ DEPENDENCIES
   slim-rails
   spring
   spring-watcher-listen (~> 2.0.0)
+  thinking-sphinx (~> 4.0)
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)

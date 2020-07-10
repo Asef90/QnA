@@ -5,7 +5,7 @@ FactoryBot.define do
   # end
 
   factory :comment do
-    body { "Body" }
+    body { "CommentBody" }
     association :author, factory: :user
 
     trait :invalid do
