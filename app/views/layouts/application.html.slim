@@ -1,6 +1,9 @@
 doctype html
 htnl
   head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+
     title Qna
     = include_gon(init: true)
     = csrf_meta_tags
@@ -10,7 +13,8 @@ htnl
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
   body
-    .no-roots
-    = render 'shared/flash'
-    = render 'shared/header'
-    = yield
+    div class="container"
+      .no-roots
+      = render 'shared/flash'
+      = render 'shared/header'
+      = yield

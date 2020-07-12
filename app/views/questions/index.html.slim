@@ -1,8 +1,10 @@
-p= link_to 'Ask question', new_question_path
+div class="row"
+  div class="col col-md"
+    p= link_to 'Ask question', new_question_path
 
-h1 All questions
+    h1 All questions
 
-div
-  ol id="questions-list"
-    -@questions.each do |question|
-      li= link_to question.title, question
+    div
+      ol id="questions-list"
+        -@questions.each do |question|
+          li= link_to question.title, question

@@ -1,10 +1,10 @@
 .nested-fields
-  .field
+  div class="field form-group"
     = f.label :name, 'Link name'
     br
-    = f.text_field :name
-  .field
+    = f.text_field :name, class: "form-control"
+  div class="field form-group"
     = f.label :url
     br
-    = f.text_field :url
+    = f.text_field :url, class: "form-control"
   = link_to_remove_association "remove link", f
