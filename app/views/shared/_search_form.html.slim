@@ -1,0 +1,6 @@
+= form_with(url: search_path, method: :get, local: true) do
+  = label_tag(:query, "Search for:")
+  = text_field_tag(:query)
+  = label_tag(:area, "Search area:")
+  = select_tag(:area, options_for_select(["All", "Answer", "Comment", "Question", "User"]))
+  = submit_tag("Search")
