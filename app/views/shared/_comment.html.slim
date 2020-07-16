@@ -1,2 +1,4 @@
-p class='comment' id="comment-#{comment.id}"
-  = comment.body
+- cache comment do
+
+  p class='comment' id="comment-#{comment.id}"
+    = comment.body

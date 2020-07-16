@@ -1,27 +1,25 @@
 div class='answer' id="answer-#{answer.id}"
-  = answer.body
+  - cache answer do
 
-  p id="answer-votes-number-#{answer.id}"
-    = answer.votes_number
+    p= answer.body
+
+    -if answer.links.any?
+      = render 'shared/links', resource: answer
+
+    -if answer.files.attached?
+      = render 'shared/files', resource: answer
+
+    p id="answer-votes-number-#{answer.id}"
+      = answer.votes_number
 
   -if can?(:vote_up, answer)
     = render 'shared/vote_buttons', resource: answer
-
-  -if answer.links.any?
-    = render 'shared/links', resource: answer
-
-  -if answer.files.attached?
-    = render 'shared/files', resource: answer
 
   -if can?(:update, answer)
     p= render 'answers/edit_form', answer: answer
 
   -if can?(:set_best, answer)
-    p= link_to 'Best', set_best_answer_path(answer),
-                       method: :patch,
-                       remote: true,
-                       class: "set-best-answer #{'hidden' if answer.best?}",
-                       id: "set-best-answer-#{answer.id}"
+    p= render 'answers/set_best_link', answer: answer
 
   div id='answer-comments-#{answer.id}'
     | Answer comments:

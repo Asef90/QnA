@@ -1,0 +1,7 @@
+- cache ['set_best', can?(:set_best, answer), answer] do
+
+  = link_to 'Best', set_best_answer_path(answer),
+                    method: :patch,
+                    remote: true,
+                    class: "set-best-answer #{'hidden' if answer.best?}",
+                    id: "set-best-answer-#{answer.id}"

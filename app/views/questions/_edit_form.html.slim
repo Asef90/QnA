@@ -1,30 +1,32 @@
-= link_to 'Edit', '#', class: 'edit-question-link'
+- cache ['edit_form', can?(:update, question), question] do
 
-.question-errors
-  = render 'shared/errors', resource: question
+  = link_to 'Edit', '#', class: 'edit-question-link'
 
-= form_with model: question, class: 'hidden', html: { id: 'edit-question' } do |f|
-  p
-    = f.label :title
-    br
-    = f.text_field :title
-  p
-    = f.label :body
-    br
-    = f.text_area :body
-  p
-    = f.label :files
-    br
-    = f.file_field :files, multiple: true
+  .question-errors
+    = render 'shared/errors', resource: question
 
-  p Links:
-  #links
-    = f.fields_for :links do |link|
-    .links
-      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+  = form_with model: question, class: 'hidden', html: { id: 'edit-question' } do |f|
+    p
+      = f.label :title
+      br
+      = f.text_field :title
+    p
+      = f.label :body
+      br
+      = f.text_area :body
+    p
+      = f.label :files
+      br
+      = f.file_field :files, multiple: true
 
-  p= f.submit 'Save'
+    p Links:
+    #links
+      = f.fields_for :links do |link|
+      .links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
 
-= link_to 'Delete question', question,
-                             method: :delete,
-                             data: { confirm: 'Are you sure?' }
+    p= f.submit 'Save'
+
+  = link_to 'Delete question', question,
+                               method: :delete,
+                               data: { confirm: 'Are you sure?' }

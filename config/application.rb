@@ -24,5 +24,7 @@ module Qna
                        request_specs: false,
                        routing_specs: false
     end
+
+    config.cache_store = :redis_cache_store, { url: "redis://localhost:6379/0/cache" }
   end
 end
