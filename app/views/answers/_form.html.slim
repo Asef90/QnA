@@ -1,22 +1,24 @@
-.answer-create-errors
-  p Answer:
-  = render 'shared/errors', resource: @answer
+- cache ['create_answer_form', can?(:create, Answer), @question] do
 
-= form_with model: [@question, @answer] do |f|
-  p class="form-group"
-    = f.label :body, for: 'create-answer-body'
-    br
-    = f.text_area :body, id: 'create-answer-body', class: "form-control"
-  p class="form-group"
-    = f.label :files, for: 'create-answer-filefield'
-    br
-    = f.file_field :files, id: 'create-answer-filefield', multiple: true, class: "form-control-file"
+  .answer-create-errors
+    p Answer:
+    = render 'shared/errors', resource: @answer
 
-  p Links:
-  #links
-    = f.fields_for :links do |link|
-      = render 'shared/link_fields', f: link
-    .links
-      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+  = form_with model: [@question, @answer] do |f|
+    p class="form-group"
+      = f.label :body, for: 'create-answer-body'
+      br
+      = f.text_area :body, id: 'create-answer-body', class: "form-control"
+    p class="form-group"
+      = f.label :files, for: 'create-answer-filefield'
+      br
+      = f.file_field :files, id: 'create-answer-filefield', multiple: true, class: "form-control-file"
 
-  p= f.submit 'Create answer', class:'btn btn-primary'
+    p Links:
+    #links
+      = f.fields_for :links do |link|
+        = render 'shared/link_fields', f: link
+      .links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+
+    p= f.submit 'Create answer', class:'btn btn-primary'

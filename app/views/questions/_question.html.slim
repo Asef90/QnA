@@ -1,34 +1,35 @@
 .question
-  h1= @question.title
-  p
-    = @question.body
+  - cache question do
+
+    h1= question.title
+    p= question.body
+
+    -if question.links.any?
+      = render 'shared/links', resource: question
+
+    -if question.files.attached?
+      = render 'shared/files', resource: question
 
     p id="question-votes-number-#{question.id}"
       = question.votes_number
 
-    -if can?(:vote_up, @question)
-      = render 'shared/vote_buttons', resource: @question
+  -if can?(:vote_up, question)
+    = render 'shared/vote_buttons', resource: question
 
-    -if can?(:create, Subscription)
-      = render 'shared/subscribe_buttons', resource: @question
+  -if can?(:create, Subscription)
+    = render 'shared/subscribe_buttons', resource: question
 
-    -if @question.links.any?
-      = render 'shared/links', resource: @question
+  -if can?(:update, question)
+    p= render 'edit_form', question: question
 
-    -if @question.files.attached?
-      = render 'shared/files', resource: @question
+  div id='question-comments-#{question.id}'
+    | Question comments:
+    = render partial:'shared/comment', collection: question.comments, as: :comment
 
-    -if can?(:update, @question)
-      p= render 'edit_form', question: @question
-
-    div id='question-comments-#{@question.id}'
-      | Question comments:
-      = render partial:'shared/comment', collection: @question.comments, as: :comment
-
-    -if can?(:create, Comment)
-      p= render 'shared/comment_form', commentable: @question, comment: Comment.new
+  -if can?(:create, Comment)
+    p= render 'shared/comment_form', commentable: question, comment: Comment.new
 
 .answers
-  = render @question.answers
+  = render question.answers
 
 p= render 'answers/form' if can?(:create, Answer)

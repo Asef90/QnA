@@ -6,7 +6,7 @@ class Answer < ApplicationRecord
   include Linkable
   include Votable
 
-  belongs_to :question
+  belongs_to :question, touch: true
 
   validates :body, presence: true
 

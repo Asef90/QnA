@@ -1,12 +1,14 @@
-= link_to 'Add comment', '#', class: 'add-comment-link',
-                              data: { commentable_type: commentable.class.name.downcase, commentable_id: commentable.id }
+- cache ['comment_form', can?(:create, Comment), commentable] do
 
-.comment-errors
+  = link_to 'Add comment', '#', class: 'add-comment-link',
+                                data: { commentable_type: commentable.class.name.downcase, commentable_id: commentable.id }
 
-= form_with model: comment, url: polymorphic_path([commentable, Comment]), class: 'add-comment-form hidden',
-            html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" } do |f|
-  p
-    = f.label :body, for: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"
-    = f.text_area :body, id: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"
+  .comment-errors
 
-  p= f.submit 'Save'
+  = form_with model: comment, url: polymorphic_path([commentable, Comment]), class: 'add-comment-form hidden',
+              html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" } do |f|
+    p
+      = f.label :body, for: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"
+      = f.text_area :body, id: "comment-body-textarea-#{commentable.class.name.downcase}-#{commentable.id}"
+
+    p= f.submit 'Save'
